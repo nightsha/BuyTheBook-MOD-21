@@ -47,6 +47,28 @@ const typeDefs = gql`
     removeProfile: Profile
     removeSkill(skill: String!): Profile
   }
+
+  type User {
+    _id: ID!
+    username: String!
+    email: String!
+    bookCount: Int!
+    savedBooks: [Book]
+  }
+
+  type Book {
+    bookId: BookId!
+    authors: [strings]!
+    description: String!
+    title: String!
+    image: String
+    link: String
+  }
+
+  type Auth {
+    token: ID!
+    user: UserType!
+  }
 `;
 
  
