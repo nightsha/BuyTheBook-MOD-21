@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useMutation} from `@apollo/client`;
 import {
   Container,
   Col,
@@ -17,6 +18,13 @@ const SearchBooks = () => {
   const [searchedBooks, setSearchedBooks] = useState([]);
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
+
+  // added the SAVED_BOOK mutation function using useMutation
+  const [saveBook] = useMutation(SAVE_BOOK, {
+    onError: (error) => {
+      console.log(error);
+    }
+  })
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());

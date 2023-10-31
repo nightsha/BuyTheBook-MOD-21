@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useQuery } from 'react';
+import { useMutation} from `@apollo/client`;
 import {
   Container,
   Card,
@@ -14,10 +15,17 @@ import { removeBookId } from '../utils/localStorage';
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
 
+
+  // added the REMOVE_BOOK mutation function using useMutation
+  const [removeBook] = useMutation(REMOVE_BOOK, {
+    onError: (error) => {
+      console.log(error);
+    }
+  })
   // use this to determine if `useEffect()` hook needs to run again
   const userDataLength = Object.keys(userData).length;
-
-  useEffect(() => {
+// Replacing useEffect with useQuery
+  useQuery(() => {
     const getUserData = async () => {
       try {
         const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -51,13 +59,15 @@ const SavedBooks = () => {
     }
 
     try {
-      const response = await deleteBook(bookId, token);
+      const { data } = await removeBook({
+        variables: { bookId },   
+    });
 
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
 
-      const updatedUser = await response.json();
+      const updatedUser = data.removeBook;
       setUserData(updatedUser);
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
