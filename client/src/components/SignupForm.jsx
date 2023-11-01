@@ -1,8 +1,20 @@
 import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-
-import { createUser } from '../utils/API';
+// replaced createUser with ADD_USER
+import { gql } from '@apollo/client';
 import Auth from '../utils/auth';
+
+export const ADD_USER = gql`
+   mutation AddUser($username: String!, $email:, String!, $password: String!) {
+      addUser(username: $username, email: $email, password: $password) {
+        token
+        user {
+          id: ID!
+          username: String!
+          email: String!
+        }
+      }
+   }`
 
 const SignupForm = () => {
   // set initial form state
